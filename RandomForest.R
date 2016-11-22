@@ -26,8 +26,22 @@ morethan_once=data[,-once]
 twice=which(colsum<=2)
 morethan_twice=data[,-twice]
 
+three=which(colsum<=3)
+morethan_3times=data[,-three]
+
+ten=which(colsum<=10)
+morethan_10times=data[,-ten]
+
 library(randomForest)
 set.seed(15)
-morethan_twice$biaoqian = as.factor(morethan_twice$biaoqian)
-attach(morethan_twice)
-rf.data = randomForest(biaoqian~.-biaoqian,data=morethan_twice, mtry=80,ntree=2)
+# morethan_twice$biaoqian = as.factor(morethan_twice$biaoqian)
+# attach(morethan_twice)
+morethan_10times$biaoqian = as.factor(morethan_10times$biaoqian)
+attach(morethan_10times)
+ptm <- proc.time()
+# rf.data = randomForest(biaoqian~.-biaoqian,data=morethan_twice, mtry=65,ntree=100)
+rf.data = randomForest(biaoqian~.-biaoqian,data=morethan_10times, mtry=50,ntree=100)
+proc.time() - ptm
+importance = rf.data$importance
+features_used = which(importance>0)
+length(features_used)
